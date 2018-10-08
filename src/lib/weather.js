@@ -1,27 +1,13 @@
-import axios from 'axios';
+import WeatherClient from './weatherclient';
 
-export default class weatherClient {
-    constructor(appKey) {
-        this.appKey = appKey;
+const APP_KEY = '66e11fc73f1d842e201e1e5684c01564';
 
-        this.baseURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
-        this.client = axios.create({
-            baseURL: this.baseURL,
-            app_key: this.appKey
-        });
-    }
+export default async function weather(city) {
 
-    async get(endpoint) {
+    const weather = new WeatherClient(APP_KEY);
 
-        const response = await this.client.get(endpoint)
-            .catch(error => Promise.reject(new Error(`${error.response.status}: ${error.response.statusText}`)));
+    const data = await weather.getEntries(city);
 
-        return response.data;
-    }
+    return data;
 
-    async getEntries(city){
-        const data = await this.get(`${city}`);
-
-        return data;
-    }
 }
